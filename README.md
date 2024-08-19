@@ -1,113 +1,77 @@
-# Pantograph_Detection
+# Pantograph Detection
 
-This repository contains a Python-based application designed to detect and analyze interactions between a pantograph and overhead cables in railway systems. The project uses a YOLOv8 object detection model to identify key components such as the pantograph, pantobar, and cables in a video feed. The application also tracks the movements of the pantograph and detects sparks that may occur during its interaction with the cables.
+This script processes a video to detect and analyze the movement of a pantograph, pantobar, and cables using YOLOv8 for object detection. It tracks horizontal and vertical movement, detects sparks, and records data in a CSV file.
 
-## Features
+## Requirements
 
-- **Object Detection**: Uses a YOLOv8 model to detect pantographs, pantobars, and cables in video frames.
-- **Spark Detection**: Identifies sparks occurring within the pantograph box using image processing techniques.
-- **Movement Tracking**: Tracks horizontal and vertical movements of the pantograph across video frames.
-- **Contact Points Calculation**: Detects and calculates the distances between the pantobar and cables.
-- **Video Annotation**: Annotates the video with detected objects, movements, contact points, and spark detection information.
-- **CSV Logging**: Records movement data and spark detection status at each second of the video.
-
-## Prerequisites
-
-To run this project, you need to have the following installed:
-
-- Python 3.7 or later
-- OpenCV
+- Python 3.6 or later
+- OpenCV (`opencv-python`)
 - NumPy
-- Ultralytics YOLOv8
+- `ultralytics` (for YOLOv8)
 
-You can install the required Python packages using pip:
+You can install the required packages using pip:
 
 ```bash
 pip install opencv-python-headless numpy ultralytics
 ```
+## Setup
 
-## Getting Started
+- **YOLO Model**: Ensure you have a trained YOLOv8 model for object detection. Update the `model_path` variable with the path to your model's weights.
 
-1. **Clone the Repository:**
+- **Video Paths**: Update `input_video_path` and `output_video_path` with the paths to your input and output video files, respectively.
+
+- **CSV Output**: Set `csv_output_path` to the desired location for saving the CSV file that will contain movement and sparks data.
+
+## Script Overview
+
+- **Object Detection**: Uses YOLOv8 to detect pantograph, pantobar, and cables in each frame of the video.
+
+- **Movement Tracking**: Calculates the horizontal and vertical movement of the pantograph between frames.
+
+- **Sparks Detection**: Identifies sparks in the pantobar region by analyzing bright spots.
+
+- **Contact Points**: Computes distances between the pantobar and cables at contact points.
+
+- **CSV Logging**: Logs timestamped movement data and the number of sparks detected into a CSV file.
+
+- **Video Output**: Saves the processed video with visual annotations.
+
+## Usage
+
+1. Update the `input_video_path`, `output_video_path`, and `csv_output_path` variables in the script with appropriate paths.
+
+2. Run the script:
 
    ```bash
-   git clone https://github.com/yourusername/pantograph-detection.git
-   cd pantograph-detection
+   python your_script_name.py
    ```
+3. The script will process the input video, detect relevant objects, track movements, detect sparks, and save the results to the specified output video and CSV file.
 
-2. **Prepare the YOLOv8 Model:**
-
-   - Place the trained YOLOv8 model (`best.pt`) in the project directory. Ensure the model is trained to detect the pantograph, pantobar, and cables.
-
-3. **Provide Input Video:**
-
-   - Place your input video in the project directory or provide the path to the video file in the script.
-
-4. **Run the Script:**
-
-   Execute the main script to process the video:
-
-   ```bash
-   python detect_pantograph.py
-   ```
-
-   Replace `detect_pantograph.py` with the filename you’ve given to the script.
-
-## Detailed Workflow
-
-1. **Video Input**: The script reads the input video frame by frame.
-
-2. **Object Detection**: The YOLOv8 model detects objects (pantograph, pantobar, and cables) in each frame.
-
-3. **Spark Detection**: The script processes each frame to detect any sparks within the pantograph bounding box.
-
-4. **Movement Calculation**: It tracks the center position of the pantograph across frames to calculate horizontal and vertical movements.
-
-5. **Contact Points**: The script calculates the contact points between the pantobar and cables, measuring the distance between the pantobar’s center and each contact point.
-
-6. **Video Annotation**: All detections, movements, and spark events are annotated on the video.
-
-7. **Data Logging**: Movements and spark detection statuses are logged into a CSV file with timestamps.
-
-## Output
-
-- **Annotated Video**: The processed video with annotations is saved as `output.mp4` (or any specified name).
-- **CSV Log**: A CSV file (`movement_data.csv`) is generated, logging the following for each second:
-  - Timestamp (in seconds)
-  - Horizontal Movement (in pixels)
-  - Vertical Movement (in pixels)
-  - Spark Detected (Boolean)
-
-## Example Usage
-
-Here's an example of how to execute the script:
+## Example
 
 ```bash
-python detect_pantograph.py --model-path path/to/best.pt --input-video path/to/input.mp4 --output-video path/to/output.mp4 --csv-output path/to/movement_data.csv
+import cv2
+import numpy as np
+import csv
+from ultralytics import YOLO
+
+# YOLO model path
+model_path = '/path/to/your/yolo_model.pt'
+model = YOLO(model_path)
+
+# Video and CSV paths
+input_video_path = '/path/to/input_video.mp4'
+output_video_path = '/path/to/output_video.mp4'
+csv_output_path = '/path/to/output_data.csv'
+
+# Your script here
 ```
+## Notes
 
-## Future Enhancements
-
-- **Real-time Processing**: Implement real-time video processing and detection.
-- **Advanced Spark Detection**: Enhance spark detection using more sophisticated image processing techniques or deep learning models.
-- **UI Integration**: Develop a user interface for easier interaction with the tool.
-- **Model Improvements**: Fine-tune the YOLOv8 model for higher accuracy in detection.
-
-## Contributing
-
-Contributions are welcome! If you have any ideas, suggestions, or issues, please feel free to open an issue or submit a pull request.
+- Ensure the YOLO model is correctly trained and configured for detecting the required objects.
+- Adjust the detection parameters as needed for different video conditions.
+- The output video and CSV file will be saved in the specified paths.
 
 ## License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
-
-## Acknowledgments
-
-- **Ultralytics YOLO**: Thanks to the Ultralytics team for developing and maintaining the YOLOv8 model.
-- **OpenCV**: For providing a robust computer vision library.
-
-## Contact
-
-For any questions or inquiries, please contact [proshan2004@gmail.com].
-
-
